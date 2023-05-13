@@ -1,0 +1,33 @@
+<section>
+  <div class="container">
+    <table class="table mt-4 ml-auto">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Address</th>
+          <th scope="col">pincode</th>
+          <th scope="col">Mobile</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Payment<br>Method</th>
+          <th scope="col">status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each orders}}
+        <tr>
+          <td>{{this.date}}</td>
+          <td>{{this.orderDetails.address}}</td> 
+          <td>{{this.orderDetails.pincode}}</td>
+          <td>{{this.orderDetails.mobile}}</td>
+          <td>{{this.total}}</td>
+          <td>{{this.payment}}</td>
+          <td>{{this.status}}</td>
+          <td>
+            <a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Products</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

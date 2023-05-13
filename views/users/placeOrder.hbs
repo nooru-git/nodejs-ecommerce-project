@@ -1,0 +1,124 @@
+<section>
+    <div class="container">
+
+        <form action="" id="checkout-form">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <h3 class="text-center mt-3">Enter Delivery Deatails</h3>
+
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Local Adress" name="address">
+                        <small id="Address" class="form-text text-muted">We'll never share your data with
+                            anyoneelse.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Pincode</label>
+                        <input type="text" class="form-control" id="pincode" placeholder="Area Pincode" name="pincode">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Mobile</label>
+                        <input type="tel" class="form-control" id="mobile" placeholder="10 digit mobile number"
+                            name="mobile">
+                        <input type="text" id="userId" name="userId" value="{{user._id}}" hidden>
+                    </div>
+
+                    <!-- <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div> -->
+                </div>
+                <div class="col-md-4 col-12 ">
+                    <div class="container card ml-4 mt-5" style="width: 19rem; ">
+                        <div class="card-body mt-2">
+                            <h5>Total Amount: Rs.{{total}}/-</h5>
+                            <hr>
+                            <div>
+                                <h6>Payment Methods</h6>
+                                <label for="">
+                                    <input type="radio" value="COD" name="payment-method"> COD
+                                </label>
+                                <br>
+                                <label for="" class=" mt-2">
+                                    <input type="radio" value="Online" name="payment-method"> Online Payment Method
+                                </label>
+                                <button name="checkout" id="checkout" class="btn btn-primary float-end mt-2"
+                                    type="submit">Checkout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+    </div>
+</section>
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order/',
+            data: $('#checkout-form').serialize(),
+            method: 'post',
+            success: (response) => {
+                if (response.CodSuccess) {
+                    location.href = "/order-placed/"
+                }
+                else {
+                    razorpay(response);
+                }
+            }
+        })
+    })
+    function razorpay(order) {
+        var options = {
+            "key": "rzp_test_HsBO4E50rGOL5z", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "unity cart",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)
+
+                verifypayment(response, order);
+            },
+            "prefill": {
+                "name": "Shanu",
+                "email": "workspacenooru@google.com",
+                "contact": "9048435680"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#b9f28e"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+
+    function verifypayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment',
+            data: {
+                payment,
+                order
+            },
+            method: 'post',
+            success:(response)=>{
+                if(response.status){
+                    alert('yh success')
+                    location.href = "/order-placed/"
+                }else{
+                    alert("payment rejected")
+                }
+            }
+        })
+    }
+
+</script>

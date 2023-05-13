@@ -1,0 +1,24 @@
+<section>
+    <div class="container mt-4">
+        <div class="row">
+
+            <div class="col-md-6 offset-md-3">
+                <h3 class="text-center text-info">Add Product</h3>
+                <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+                    <input type="text" name="productName" placeholder="product name" class="form-control mt-3">
+                    <input type="text" name="productCategory" placeholder="product category" class="form-control mt-3">
+                    <input type="number" min="1" max="100000" name="productPrice" placeholder="product price" class="form-control mt-3">
+
+                    <textarea name="productDescription" id="description" cols="30" rows="5" placeholder="description here..." class="form-control mt-3"> type here... </textarea>
+
+                    <label for="formFileSm" class="form-label mt-3" name="Image">add product image</label>
+                    <input class="form-control form-control-sm " id="formFileSm" type="file" name="productImage">
+
+                    <button type="submit" class="btn btn-success mt-3">Submit</button> 
+                </form>
+                
+
+            </div>
+        </div>
+    </div>
+</section>
